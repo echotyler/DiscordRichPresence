@@ -41,13 +41,17 @@ namespace DiscordRichPresence
 
         public static void AlterGameStatus()
         {
-            if (customGame)
+            if (GuiController.instance.setseed)
+            {
+                DiscordController.current.UpdateStatus($"Playing a seeded run, Seed: {GuiController.instance.seed}", $"Score: {FsmVariables.GlobalVariables.GetFsmInt("Score").Value}", "slope_icon", "Logo");
+            }
+            else if (!customGame)
             {
                 DiscordController.current.UpdateStatus($"Playing a normal game", $"Score: {FsmVariables.GlobalVariables.GetFsmInt("Score").Value}", "slope_icon", "Logo");
             }
             else
             {
-                DiscordController.current.UpdateStatus($"Playing a custom game", $"Score: {FsmVariables.GlobalVariables.GetFsmInt("Score").Value}", "slope_icon", "Logo");
+                DiscordController.current.UpdateStatus($"Playing a custom run", $"Score: {FsmVariables.GlobalVariables.GetFsmInt("Score").Value}", "slope_icon", "Logo");
             }
         }
 
@@ -55,14 +59,28 @@ namespace DiscordRichPresence
         {
             DiscordController.current.ResetTime();
             customGame = false;
-            DiscordController.current.UpdateStatus($"Playing a normal game", $"Score: {FsmVariables.GlobalVariables.GetFsmInt("Score").Value}", "slope_icon", "Logo");
+            if (GuiController.instance.setseed)
+            {
+                DiscordController.current.UpdateStatus($"Playing a seeded run, Seed: {GuiController.instance.seed}", $"Score: {FsmVariables.GlobalVariables.GetFsmInt("Score").Value}", "slope_icon", "Logo");
+            }
+            else
+            {
+                DiscordController.current.UpdateStatus($"Playing a normal run", $"Score: {FsmVariables.GlobalVariables.GetFsmInt("Score").Value}", "slope_icon", "Logo");
+            }
         }
 
         public static void HandlePlay_Custom()
         {
             DiscordController.current.ResetTime();
             customGame = true;
-            DiscordController.current.UpdateStatus($"Playing a custom game", $"Current Score: {FsmVariables.GlobalVariables.GetFsmInt("Score").Value}", "slope_icon", "Logo");
+            if (GuiController.instance.setseed)
+            {
+                DiscordController.current.UpdateStatus($"Playing a seeded run, Seed: {GuiController.instance.seed}", $"Score: {FsmVariables.GlobalVariables.GetFsmInt("Score").Value}", "slope_icon", "Logo");
+            }
+            else
+            {
+                DiscordController.current.UpdateStatus($"Playing a custom game", $"Current Score: {FsmVariables.GlobalVariables.GetFsmInt("Score").Value}", "slope_icon", "Logo");
+            }
         }
 
         public static void Handle_ShowGameOver()
